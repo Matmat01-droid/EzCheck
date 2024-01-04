@@ -1,9 +1,19 @@
+import 'package:ezcheck_app/helper/db_helper.dart'; // Import your database helper
+import 'package:ezcheck_app/models/user.dart';
+import 'package:ezcheck_app/screens/onboard1_screen.dart';
 import 'package:ezcheck_app/screens/onboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'login_screen.dart';
 
 class RegisterPage extends StatelessWidget {
-  const RegisterPage({Key? key});
+  RegisterPage({Key? key});
+
+  // Controller for the text fields
+  final TextEditingController fullNameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +23,7 @@ class RegisterPage extends StatelessWidget {
         child: Center(
           child: Container(
             width: 400,
-            height: 690, // Adjust the height as needed
+            height: 690,
             padding: const EdgeInsets.all(16.0),
             decoration: BoxDecoration(
               color: Colors.white,
@@ -46,6 +56,7 @@ class RegisterPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 30),
                 TextField(
+                  controller: fullNameController,
                   decoration: InputDecoration(
                     labelText: 'Full Name',
                     border: OutlineInputBorder(
@@ -57,6 +68,7 @@ class RegisterPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 TextField(
+                  controller: emailController,
                   decoration: InputDecoration(
                     labelText: 'Email',
                     border: OutlineInputBorder(
@@ -68,6 +80,7 @@ class RegisterPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 TextField(
+                  controller: passwordController,
                   decoration: InputDecoration(
                     labelText: 'Password',
                     border: OutlineInputBorder(
@@ -80,20 +93,9 @@ class RegisterPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 TextField(
+                  controller: confirmPasswordController,
                   decoration: InputDecoration(
                     labelText: 'Confirm Password',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    filled: true,
-                    fillColor: Colors.white.withOpacity(1),
-                  ),
-                  obscureText: true,
-                ),
-                const SizedBox(height: 16),
-                TextField(
-                  decoration: InputDecoration(
-                    labelText: 'Email Address',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -108,20 +110,14 @@ class RegisterPage extends StatelessWidget {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(primary: Color(0xFF31434F)),
                     onPressed: () async {
-                      // Navigate to the Data & Privacy page
-                      final bool? agreed = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => LoginScreenCheck(),
-                        ),
-                      );
-
-                      // Check the result
-                      if (agreed == true) {
-                        // Continue with the registration process
-                        // You can navigate back to the login page or perform other actions
+                      // Check if passwords match
+                      if (passwordController.text ==
+                          confirmPasswordController.text) {
+                        // Call the registration method from the DatabaseHelper
+                        await _registerUser(context);
                       } else {
-                        // User canceled, you can handle it accordingly
+                        // Show an error message if passwords don't match
+                        _showErrorDialog(context, 'Passwords do not match.');
                       }
                     },
                     child: const Padding(
@@ -164,6 +160,61 @@ class RegisterPage extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+Future<void> _registerUser(BuildContext context) async {
+  // Get user input
+  String fullName = fullNameController.text;
+  String email = emailController.text;
+  String password = passwordController.text;
+
+  // Create a User object
+  User user = User(fullname: fullName, email: email, password: password);
+
+  print('User to be registered: $user');
+
+  // Call the registration method from the DatabaseHelper
+  DatabaseHelper dbHelper = DatabaseHelper();
+  int result = await dbHelper.registerUser(user);
+
+  print('Registration result: $result');
+
+  // Check the result and navigate accordingly
+  if (result > 0) {
+    // Registration successful
+    // You can navigate to the main screen or perform other actions
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => LoginScreenCheck(),
+      ),
+    );
+  } else {
+    // Registration failed
+    // You can show an error message or handle it accordingly
+    _showErrorDialog(context, 'Registration failed. Please try again.');
+  }
+}
+
+
+  void _showErrorDialog(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Error'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

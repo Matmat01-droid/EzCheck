@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 Future main() async {
-  runApp(MultiProvider(providers: providersAll, child: const EzCheckScreen(),));
+  runApp(MultiProvider(
+    providers: providersAll,
+    child: const EzCheckScreen(),
+  ));
 }
 
 class EzCheckScreen extends StatelessWidget {

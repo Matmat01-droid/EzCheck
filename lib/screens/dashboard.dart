@@ -51,89 +51,78 @@ class _MainScreenState extends State<MainScreen> {
         ],
         backgroundColor: Colors.grey[300],
       ),
-      body: Column(
+      body: GridView.count(
+        crossAxisCount: 2,
+        padding: const EdgeInsets.all(8.0),
+        mainAxisSpacing: 10.0,
+        crossAxisSpacing: 10.0,
         children: [
-          Align(
-            alignment: Alignment.topCenter,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ShopNowScreen(),
+                ),
+              );
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                color: Color(0xFF31434F),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              height: 200,
+              width: 200,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  GestureDetector(
-                    onTap: () {
-                      // Handle the click on Container 1
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ShopNowScreen(),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Color(0xFF31434F),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      height: 200,
-                      width: 200,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.shopping_bag,
-                            color: Colors.white,
-                            size: 48,
-                          ),
-                          SizedBox(height: 10),
-                          Text(
-                            'Shop Now',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ],
-                      ),
-                    ),
+                  Icon(
+                    Icons.shopping_bag,
+                    color: Colors.white,
+                    size: 48,
                   ),
                   SizedBox(height: 10),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CartScreen(),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Color(0xFF31434F),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      height: 200,
-                      width: 200,
-                      child: const Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.shopping_cart,
-                            color: Colors.white,
-                            size: 48,
-                          ),
-                          SizedBox(height: 10),
-                          Text(
-                            'My Shopping Cart',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ],
-                      ),
-                    ),
+                  Text(
+                    'Shop Now',
+                    style: TextStyle(color: Colors.white),
                   ),
                 ],
               ),
             ),
           ),
-          SizedBox(height: 20),
-          Text('TESTER')
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CartScreen(),
+                ),
+              );
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                color: Color(0xFF31434F),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              height: 200,
+              width: 200,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.shopping_cart,
+                    color: Colors.white,
+                    size: 48,
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    'My Shopping Cart',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

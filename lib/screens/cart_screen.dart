@@ -7,7 +7,11 @@ class CartScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Shopping Cart'),backgroundColor: Color(0xFF31434F),
+        title: Text('Shopping Cart'),
+        backgroundColor: Color(0xFF31434F),
+      ),
+      body: Center(
+        child: Text('Cart Screen - Display your added products here.'),
       ),
     );
   }

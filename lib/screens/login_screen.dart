@@ -1,3 +1,4 @@
+import 'package:ezcheck_app/helper/db_helper.dart';
 import 'package:ezcheck_app/screens/dashboard.dart';
 import 'package:ezcheck_app/screens/terms.dart';
 import 'package:flutter/material.dart';
@@ -7,16 +8,19 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController usernameController = TextEditingController();
+    TextEditingController emailController = TextEditingController();
     TextEditingController passwordController = TextEditingController();
+    DatabaseHelper dbHelper = DatabaseHelper(); // Create an instance of DatabaseHelper
 
-    void login() {
+    void login() async {
       // Replace this logic with your actual login logic
-      String username = usernameController.text;
+      String email = emailController.text;
       String password = passwordController.text;
 
       // Example validation (replace with your own logic)
-      if (username == 'Admin' && password == '123') {
+      bool success = await dbHelper.loginUser(email, password);
+      if (success) {
+        // Login successful, navigate to the main screen
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -55,7 +59,7 @@ class LoginPage extends StatelessWidget {
         child: Center(
           child: Container(
             width: 400,
-            height: 500, // Set the desired height for the rectangle container
+            height: 500,
             padding: EdgeInsets.all(20),
             decoration: BoxDecoration(
               color: Colors.white,
@@ -87,7 +91,7 @@ class LoginPage extends StatelessWidget {
                   child: const Text('Please log-in your account'),
                 ),
                 TextField(
-                  controller: usernameController,
+                  controller: emailController,
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white.withOpacity(1.0),
