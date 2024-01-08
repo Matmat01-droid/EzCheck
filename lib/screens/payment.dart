@@ -160,6 +160,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
               Text('Thank you for your purchase!'),
               SizedBox(height: 10),
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Color(0xFF31434F),
+                ),
                 onPressed: () {
                   moveToHistoryScreen(context); // Ensure passing the context
                 },
