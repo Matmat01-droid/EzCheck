@@ -25,7 +25,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          // mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text('Total Amount: ₱${widget.totalAmount.toStringAsFixed(2)}'),
             SizedBox(height: 20),

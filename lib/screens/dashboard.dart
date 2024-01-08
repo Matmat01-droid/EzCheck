@@ -144,7 +144,10 @@ class _MainScreenState extends State<MainScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => HistoryScreen(),
+                builder: (context) => HistoryScreen(
+                  totalAmount: 0.0, // Pass the appropriate total amount
+                  cartItems: [],
+                ),
               ),
             );
           }
