@@ -1,6 +1,6 @@
+import 'package:ezcheck_app/helper/db_helper.dart';
 import 'package:ezcheck_app/screens/payment.dart';
 import 'package:flutter/material.dart';
-import 'package:ezcheck_app/helper/db_helper.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({Key? key}) : super(key: key);
@@ -90,7 +90,31 @@ class _CartScreenState extends State<CartScreen> {
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Quantity: ${item['quantity']}'),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('Quantity: '),
+                              Row(
+                                children: [
+                                  IconButton(
+                                    icon: Icon(Icons.remove),
+                                    onPressed: () {
+                                      _updateQuantity(item['id'],
+                                          item['quantity'] - 1);
+                                    },
+                                  ),
+                                  Text('${item['quantity']}'),
+                                  IconButton(
+                                    icon: Icon(Icons.add),
+                                    onPressed: () {
+                                      _updateQuantity(item['id'],
+                                          item['quantity'] + 1);
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                           Text(
                               'Total Price: ₱${totalPrice.toStringAsFixed(2)}'),
                         ],
@@ -134,5 +158,10 @@ class _CartScreenState extends State<CartScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> _updateQuantity(int itemId, int newQuantity) async {
+    await DatabaseHelper().updateCartItemQuantity(itemId, newQuantity);
+    loadCartItems();
   }
 }

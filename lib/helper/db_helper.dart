@@ -185,4 +185,19 @@ class DatabaseHelper {
       whereArgs: [itemId],
     );
   }
+
+  Future<void> updateCartItemQuantity(int itemId, int newQuantity) async {
+    try {
+      Database db = await database;
+      await db.update(
+        'cart',
+        {'quantity': newQuantity},
+        where: 'id = ?',
+        whereArgs: [itemId],
+      );
+    } catch (e) {
+      print('Error updating quantity: $e');
+      rethrow;
+    }
+  }
 }
