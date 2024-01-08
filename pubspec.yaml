@@ -29,6 +29,7 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   audioplayers: ^3.0.1
+  cached_network_image: ^3.3.1
   cupertino_icons: ^1.0.2
   flutter:
     sdk: flutter
@@ -65,6 +66,45 @@ flutter:
     - assets/images/EzCheckText1.png
     - assets/images/EzCheckText2.png
     - assets/Barcode-scanner-beep-sound.mp3
+    - assets/images/milo.jpg
+    - assets/images/bear brand.jpg
+    - assets/images/birch tree.jpg
+    - assets/images/kopiko.jpg
+    - assets/images/great taste.jpg
+    - assets/images/energen.jpg
+    - assets/images/tang.jpg
+    - assets/images/joy dishwashing liquid.jpg
+    - assets/images/smart dishwashing paste.jpg
+    - assets/images/axion dishwashing paste.jpg
+    - assets/images/tide.jpg
+    - assets/images/pride.jpg
+    - assets/images/ariel.jpg
+    - assets/images/surf.jpg
+    - assets/images/calla.jpg
+    - assets/images/coca-cola.jpg
+    - assets/images/pepsi.jpg
+    - assets/images/sprite.jpg
+    - assets/images/royal.jpg
+    - assets/images/mountain dew.jpg
+    - assets/images/mirinda.jpg
+    - assets/images/piattos.jpg
+    - assets/images/nova.jpg
+    - assets/images/chippy.jpg
+    - assets/images/clover.jpg
+    - assets/images/goya.jpg
+    - assets/images/flat tops.jpg
+    - assets/images/choco mucho.jpg
+    - assets/images/beng beng.jpg
+    - assets/images/cream o.jpg
+    - assets/images/tender juicy.jpg
+    - assets/images/idol.jpg
+    - assets/images/funtastyk.jpg
+    - assets/images/bingo.jpg
+    - assets/images/youngs town.jpg
+    - assets/images/century tuna.jpg
+    - assets/images/fresca tuna.jpg
+    - assets/images/argentina.jpg
+    - assets/images/king cup.jpg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
   # For details regarding adding assets from package dependencies, see

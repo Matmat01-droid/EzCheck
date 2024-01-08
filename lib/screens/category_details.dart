@@ -24,9 +24,9 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
   }
 
   Future<void> _initialize() async {
-     print('_initialize start');
-  await _loadProducts();
-  print('_initialize end');
+    print('_initialize start');
+    await _loadProducts();
+    print('_initialize end');
   }
 
   Future<void> _loadProducts() async {

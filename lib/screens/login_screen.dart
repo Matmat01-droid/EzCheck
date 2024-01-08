@@ -10,7 +10,8 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     TextEditingController emailController = TextEditingController();
     TextEditingController passwordController = TextEditingController();
-    DatabaseHelper dbHelper = DatabaseHelper(); // Create an instance of DatabaseHelper
+    DatabaseHelper dbHelper =
+        DatabaseHelper(); // Create an instance of DatabaseHelper
 
     void login() async {
       // Replace this logic with your actual login logic
@@ -59,7 +60,7 @@ class LoginPage extends StatelessWidget {
         child: Center(
           child: Container(
             width: 400,
-            height: 500,
+            height: 475,
             padding: EdgeInsets.all(20),
             decoration: BoxDecoration(
               color: Colors.white,
@@ -77,7 +78,7 @@ class LoginPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset('assets/images/EzCheckText2.png'),
-                const SizedBox(height: 20),
+                const SizedBox(height: 15),
                 const Text(
                   'Login',
                   style: TextStyle(
@@ -85,7 +86,7 @@ class LoginPage extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 15),
                 Container(
                   padding: EdgeInsets.all(10),
                   child: const Text('Please log-in your account'),
@@ -101,7 +102,7 @@ class LoginPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
                 TextField(
                   controller: passwordController,
                   decoration: InputDecoration(
@@ -114,7 +115,7 @@ class LoginPage extends StatelessWidget {
                   ),
                   obscureText: true,
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 15),
                 Container(
                   width: 400,
                   child: ElevatedButton(

@@ -1,4 +1,6 @@
-import 'package:ezcheck_app/screens/category_details.dart';
+// shop_now_screen.dart
+
+import 'package:ezcheck_app/screens/subcategory.dart';
 import 'package:flutter/material.dart';
 
 class ShopNowScreen extends StatelessWidget {
@@ -33,20 +35,18 @@ class ShopNowScreen extends StatelessWidget {
   Widget _buildCategory(BuildContext context, String title, IconData icon) {
     return GestureDetector(
       onTap: () async {
-        // Handle the category click here, for example, navigate to a new screen
-        // or perform some other action.
+        // Handle the category click here
         print('Category clicked: $title');
-        // Example: Navigate to a new screen
         await Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => CategoryDetailsScreen(categoryTitle: title),
+            builder: (context) => SubcategoryScreen(mainCategory: title),
           ),
         );
       },
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Color(0xFF31434F),
           borderRadius: BorderRadius.circular(8.0),
           boxShadow: [
             BoxShadow(
@@ -65,15 +65,15 @@ class ShopNowScreen extends StatelessWidget {
                 Icon(
                   icon,
                   size: 48.0,
-                  color: Colors.black,
+                  color: Colors.white,
                 ),
                 const SizedBox(height: 8.0),
                 Text(
                   title,
                   style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16.0,
-                  ),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16.0,
+                      color: Colors.white),
                 ),
               ],
             ),
