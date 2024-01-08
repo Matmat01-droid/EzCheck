@@ -93,7 +93,7 @@ class ProductListingScreen extends StatelessWidget {
               price: 70.00,
               imageUrl: 'assets/images/mountain dew.jpg',
             ),
-             Product(
+            Product(
               name: 'Mirinda',
               description: 'Mirinda Orange 1L',
               price: 70.00,
@@ -256,31 +256,31 @@ class ProductListingScreen extends StatelessWidget {
             Product(
               name: 'Youngs Town',
               description: 'Youngs Town Premium Sardines Regular 155g',
-              price: 5.99,
+              price: 25.00,
               imageUrl: 'assets/images/youngs town.jpg',
             ),
             Product(
               name: 'Century Tuna',
               description: 'Century Tuna Flakes in Oil 155g ',
-              price: 5.99,
+              price: 28.00,
               imageUrl: 'assets/images/century tuna.jpg',
             ),
             Product(
               name: 'Fresca Tuna',
               description: 'Fresca Tuna Flakes Afritada 175g ',
-              price: 5.99,
+              price: 20.00,
               imageUrl: 'assets/images/fresca tuna.jpg',
             ),
             Product(
               name: 'Argentina',
               description: 'Argentina Corned Beef 150g',
-              price: 5.99,
+              price: 35.00,
               imageUrl: 'assets/images/argentina.jpg',
             ),
             Product(
               name: 'King Cup',
               description: 'King Cup Sardine 155g',
-              price: 5.99,
+              price: 20.00,
               imageUrl: 'assets/images/king cup.jpg',
             ),
           ];

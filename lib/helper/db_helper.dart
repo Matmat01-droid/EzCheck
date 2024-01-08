@@ -1,3 +1,4 @@
+import 'package:ezcheck_app/models/products.dart';
 import 'package:ezcheck_app/models/user.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -27,7 +28,7 @@ class DatabaseHelper {
       String path = join(await getDatabasesPath(), 'your_database.db');
       return await openDatabase(
         path,
-        version: 4,
+        version: 6,
         onCreate: _createDb,
         onUpgrade: _onUpgrade,
       );
@@ -62,6 +63,7 @@ class DatabaseHelper {
   Future<void> _createDb(Database db, int version) async {
     await _createUsersTable(db);
     await _createProductsTable(db);
+    await _createCartTable(db);
   }
 
   Future<void> _createUsersTable(Database db) async {
@@ -91,11 +93,11 @@ class DatabaseHelper {
   Future<int> registerUser(User user) async {
     Database db = await database;
 
-      return await db.insert(
-        'users',
-        user.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.ignore,
-      );
+    return await db.insert(
+      'users',
+      user.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.ignore,
+    );
   }
 
   Future<bool> loginUser(String email, String password) async {
@@ -121,5 +123,66 @@ class DatabaseHelper {
     Database db = await database;
     return await db
         .query('products', where: 'category = ?', whereArgs: [category]);
+  }
+
+  Future<void> _createCartTable(Database db) async {
+    await db.execute('''
+    CREATE TABLE IF NOT EXISTS cart (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      productName TEXT,
+      quantity INTEGER,
+      price REAL
+    );
+  ''');
+  }
+
+  Future<void> addToCart(String productName, int quantity, double price) async {
+    Database db = await database;
+    await db.insert(
+      'cart',
+      {
+        'productName': productName,
+        'quantity': quantity,
+        'price': price,
+      },
+      conflictAlgorithm: ConflictAlgorithm.ignore,
+    );
+
+    print(
+        'Added to cart: Product Name: $productName, Quantity: $quantity, Price: $price');
+  }
+
+  Future<List<Map<String, dynamic>>> getCartItems() async {
+    Database db = await database;
+    List<Map<String, dynamic>> cartItems = await db.query('cart');
+
+    print('Cart items in getCartItems: $cartItems');
+
+    return cartItems;
+  }
+
+  Future<Map<String, dynamic>> getProductById(int productId) async {
+    Database db = await database;
+    List<Map<String, dynamic>> result = await db.query(
+      'products',
+      where: 'id = ?',
+      whereArgs: [productId],
+      limit: 1,
+    );
+
+    print(
+        'Product details query: SELECT * FROM products WHERE id = $productId');
+    print('Product details result: $result');
+
+    return result.isNotEmpty ? result.first : {};
+  }
+
+  Future<void> deleteCartItem(int itemId) async {
+    Database db = await database;
+    await db.delete(
+      'cart',
+      where: 'id = ?',
+      whereArgs: [itemId],
+    );
   }
 }

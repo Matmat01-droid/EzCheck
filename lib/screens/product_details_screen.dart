@@ -1,7 +1,9 @@
-import 'package:ezcheck_app/models/cart_manager.dart';
+// ... Existing imports ...
+
+import 'package:ezcheck_app/helper/db_helper.dart';
+import 'package:ezcheck_app/models/products.dart';
 import 'package:ezcheck_app/screens/cart_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:ezcheck_app/models/products.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   final Product product;
@@ -14,7 +16,8 @@ class ProductDetailsScreen extends StatefulWidget {
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   int quantity = 1;
-  void showAddToCartDialog(BuildContext context) {
+
+  void showAddToCartDialog(BuildContext context) async {
     // Show a dialog when the user presses the "Add to Cart" button
     showDialog(
       context: context,
@@ -31,19 +34,21 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               child: Text('OK'),
             ),
             TextButton(
-              onPressed: () {
-                // Add the product to the cart and navigate to the cart screen
-                CartManager().addToCart(widget.product, quantity);
-                Navigator.of(context).pop(); // Close the dialog
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => CartScreen(),
-                  ),
-                );
-              },
-              child: Text('View Cart'),
-            ),
+  onPressed: () async {
+    // Add the product to the cart
+   await DatabaseHelper().addToCart(widget.product.name, quantity,widget.product.price);
+    Navigator.of(context).pop(); // Close the dialog
+    // Navigate to the cart screen
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CartScreen(),
+      ),
+    );
+  },
+  child: Text('View Cart'),
+),
+
           ],
         );
       },
@@ -63,7 +68,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Image.asset(
-              // Use Image.asset for displaying images from assets
               'assets/images/${widget.product.name.toLowerCase()}.jpg',
               height: 200,
               width: double.infinity,
@@ -124,11 +128,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   style: ElevatedButton.styleFrom(
                     primary: Color(0xFF31434F),
                   ),
-                  onPressed: () {
+                  onPressed: () async {
                     // Handle adding to cart logic here
                     print(
                         'Added ${widget.product.name} to the cart. Quantity: $quantity');
-                    CartManager().addToCart(widget.product, quantity);
                     // Show the custom dialog
                     showAddToCartDialog(context);
                   },

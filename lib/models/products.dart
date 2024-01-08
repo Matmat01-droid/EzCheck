@@ -12,4 +12,14 @@ class Product {
     required this.imageUrl,
     this.quantity = 0,
   });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'description': description,
+      'price': price,
+      'imageUrl': imageUrl,
+      'quantity': quantity,
+    };
+  }
 }

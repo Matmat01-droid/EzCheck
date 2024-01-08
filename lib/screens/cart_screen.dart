@@ -1,7 +1,70 @@
+import 'package:ezcheck_app/screens/payment.dart';
 import 'package:flutter/material.dart';
+import 'package:ezcheck_app/helper/db_helper.dart';
 
-class CartScreen extends StatelessWidget {
-  const CartScreen({super.key});
+class CartScreen extends StatefulWidget {
+  const CartScreen({Key? key}) : super(key: key);
+
+  @override
+  _CartScreenState createState() => _CartScreenState();
+}
+
+class _CartScreenState extends State<CartScreen> {
+  List<Map<String, dynamic>> cartItems = [];
+
+  @override
+  void initState() {
+    super.initState();
+    loadCartItems();
+  }
+
+  Future<void> loadCartItems() async {
+    List<Map<String, dynamic>> items = await DatabaseHelper().getCartItems();
+
+    setState(() {
+      cartItems = items;
+    });
+  }
+
+  Future<void> _confirmDelete(int itemId) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm Delete'),
+          content: Text('Are you sure you want to delete this item?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                await _deleteItem(itemId);
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text('Delete'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _deleteItem(int itemId) async {
+    await DatabaseHelper().deleteCartItem(itemId);
+    loadCartItems();
+  }
+
+  double calculateTotalPrice() {
+    double total = 0.0;
+    for (var item in cartItems) {
+      total += item['quantity'] * (item['price'] ?? 0.0);
+    }
+    return total;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -10,8 +73,65 @@ class CartScreen extends StatelessWidget {
         title: Text('Shopping Cart'),
         backgroundColor: Color(0xFF31434F),
       ),
-      body: Center(
-        child: Text('Cart Screen - Display your added products here.'),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: <Widget>[
+            if (cartItems.isNotEmpty)
+              Column(
+                children: cartItems.map((item) {
+                  // Check if price is not null before calculating total price
+                  double totalPrice = item['quantity'] * (item['price'] ?? 0.0);
+
+                  return Card(
+                    margin: EdgeInsets.all(10),
+                    child: ListTile(
+                      title: Text('Product: ${item['productName']}'),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Quantity: ${item['quantity']}'),
+                          Text(
+                              'Total Price: ₱${totalPrice.toStringAsFixed(2)}'),
+                        ],
+                      ),
+                      trailing: IconButton(
+                        icon: Icon(Icons.delete),
+                        onPressed: () {
+                          _confirmDelete(item['id']);
+                        },
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+            SizedBox(height: 10),
+            Text(
+              'Total Price: ₱${calculateTotalPrice().toStringAsFixed(2)}',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 20),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Color(0xFF31434F),
+                  ),
+                  onPressed: () {
+                    // Add logic to navigate to the payment screen
+                    // You can replace 'PaymentScreen()' with your actual payment screen
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => PaymentScreen()),
+                    );
+                  },
+                  child: Text('Proceed to Payment'),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
