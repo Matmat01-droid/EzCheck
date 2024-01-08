@@ -3,7 +3,11 @@ import 'package:ezcheck_app/screens/scan_screen.dart';
 import 'package:flutter/material.dart';
 
 class HistoryScreen extends StatefulWidget {
-  const HistoryScreen({Key? key}) : super(key: key);
+  final double totalAmount;
+  final List<Map<String, dynamic>> cartItems;
+
+  HistoryScreen({Key? key, required this.totalAmount, required this.cartItems})
+      : super(key: key);
 
   @override
   _HistoryScreenState createState() => _HistoryScreenState();
@@ -20,7 +24,30 @@ class _HistoryScreenState extends State<HistoryScreen> {
         backgroundColor: Color(0xFF31434F),
       ),
       body: Center(
-        child: Text('No Purchases Yet.'),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Total Amount: ₱${widget.totalAmount.toStringAsFixed(2)}'),
+            SizedBox(height: 20),
+            Text('Purchase Details:'),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: widget.cartItems.map((item) {
+                double totalPrice = item['quantity'] * (item['price'] ?? 0.0);
+                return ListTile(
+                  title: Text('Product: ${item['productName']}'),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Quantity: ${item['quantity']}'),
+                      Text('Total Price: ₱${totalPrice.toStringAsFixed(2)}'),
+                    ],
+                  ),
+                );
+              }).toList(),
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Color(0xFF31434F),
