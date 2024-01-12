@@ -287,16 +287,30 @@ class _CartScreenState extends State<CartScreen> {
     }
   }
 
-  Future<void> _proceedToPayment(
-      double totalPrice, List<Map<String, dynamic>> currentCartItems) async {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) =>
-            PaymentScreen(totalAmount: totalPrice, cartItems: currentCartItems),
-      ),
-    );
+Future<void> _proceedToPayment(
+  double totalPrice, List<Map<String, dynamic>> currentCartItems) async {
+  // Proceed to the payment screen
+  bool paymentSuccess = await Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) =>
+          PaymentScreen(totalAmount: totalPrice, cartItems: currentCartItems),
+    ),
+  );
+
+  // Check if the payment was successful
+  if (paymentSuccess == true) {
+    // Clear the cart if the payment was successful
+    await DatabaseHelper().clearCart();
+    // Reload the cart items after clearing (optional, depending on your use case)
+    await loadCartItems();
   }
+}
+
+ Future<void> clearCart() async {
+  await DatabaseHelper().clearCart();
+  await loadCartItems(); // Reload the cart items after clearing (optional)
+}
 
   Future<void> _showEmptyCartDialog() async {
     return showDialog(

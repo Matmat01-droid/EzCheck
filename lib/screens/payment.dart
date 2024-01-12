@@ -1,5 +1,10 @@
+import 'dart:convert';
+
+import 'package:ezcheck_app/helper/db_helper.dart';
+import 'package:ezcheck_app/screens/cart_screen.dart';
 import 'package:ezcheck_app/screens/history_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PaymentScreen extends StatefulWidget {
   final double totalAmount;
@@ -95,11 +100,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         updateSelectedPaymentOption(value);
                       },
                     ),
-                    SizedBox(height: 20),
                     ElevatedButton(
-                      onPressed: () {
-                        showPaymentConfirmationDialog(context);
-                      },
+                      onPressed: selectedPaymentOption != null
+                          ? () {
+                              showPaymentConfirmationDialog(context);
+                            }
+                          : null,
                       style: ElevatedButton.styleFrom(
                         primary: Color(0xFF31434F),
                       ),
@@ -121,7 +127,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
     });
   }
 
-  void showPaymentConfirmationDialog(BuildContext context) {
+  void showPaymentConfirmationDialog(BuildContext context) async {
+    await savePurchaseDetails();
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -148,14 +155,22 @@ class _PaymentScreenState extends State<PaymentScreen> {
     );
   }
 
-  void showPaymentSuccessDialog(BuildContext context) {
+  Future<void> savePurchaseDetails() async {
+    // Save the purchase details to the database
+    await DatabaseHelper()
+        .savePurchaseDetails(widget.totalAmount, widget.cartItems);
+  }
+
+  void showPaymentSuccessDialog(BuildContext context) async {
+    await storePurchaseHistory();
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Payment Successful'),
           content: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisSize: MainAxisSize.min,
             children: [
               Text('Thank you for your purchase!'),
@@ -164,16 +179,55 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 style: ElevatedButton.styleFrom(
                   primary: Color(0xFF31434F),
                 ),
-                onPressed: () {
-                  moveToHistoryScreen(context);
+                onPressed: () async {
+                moveToHistoryScreen(context);
+                await DatabaseHelper().clearCart();
                 },
                 child: Text('View Purchase History'),
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Color(0xFF31434F),
+                ),
+                onPressed: () async{
+                  await DatabaseHelper().clearCart();
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => CartScreen()));
+                },
+                child: Text('OK'),
               ),
             ],
           ),
         );
       },
     );
+  }
+
+  Future<void> storePurchaseHistory() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<Map<String, dynamic>> purchaseHistory = prefs
+            .getStringList('purchaseHistory')
+            ?.map<Map<String, dynamic>>((jsonString) {
+          try {
+            return jsonDecode(jsonString);
+          } catch (e) {
+            print("Error decoding JSON: $e");
+            return {}; // or any other default value
+          }
+        }).toList() ??
+        [];
+
+    // Add the current purchase details
+    purchaseHistory.add({
+      'totalAmount': widget.totalAmount,
+      'cartItems': widget.cartItems,
+    });
+
+    // Convert the list of maps to a list of JSON strings
+    List<String> purchaseHistoryStrings =
+        purchaseHistory.map((purchase) => jsonEncode(purchase)).toList();
+
+    prefs.setStringList('purchaseHistory', purchaseHistoryStrings);
   }
 
   void moveToHistoryScreen(BuildContext context) {

@@ -18,6 +18,7 @@ class CartManager {
       price: product.price,
       imageUrl: product.imageUrl,
       quantity: quantity,
+      barcode: product.barcode,
     ));
   }
 }

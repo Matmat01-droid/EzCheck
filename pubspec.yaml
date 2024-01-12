@@ -37,7 +37,7 @@ dependencies:
   path: ^1.8.3
   pinput: ^3.0.1
   provider: ^6.0.5
-  shared_preferences: ^2.0.18
+  shared_preferences: ^2.2.2
   smooth_page_indicator: ^1.1.0
   sqflite: ^2.3.0
   vibration: ^1.7.6
@@ -106,6 +106,7 @@ flutter:
     - assets/images/argentina.jpg
     - assets/images/king cup.jpg
     - assets/images/empty cart.png
+    - assets/images/555 sardines.jpg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
   # For details regarding adding assets from package dependencies, see

@@ -28,7 +28,7 @@ class DatabaseHelper {
       String path = join(await getDatabasesPath(), 'your_database.db');
       return await openDatabase(
         path,
-        version: 6,
+        version: 7,
         onCreate: _createDb,
         onUpgrade: _onUpgrade,
       );
@@ -61,6 +61,7 @@ class DatabaseHelper {
     await _createUsersTable(db);
     await _createProductsTable(db);
     await _createCartTable(db);
+    await _createPurchaseDetailsTable(db);
   }
 
   Future<void> _createUsersTable(Database db) async {
@@ -84,6 +85,17 @@ class DatabaseHelper {
       price REAL,
       imageUrl TEXT,
       barcode TEXT
+    );
+  ''');
+  }
+
+  Future<void> _createPurchaseDetailsTable(Database db) async {
+    await db.execute('''
+    CREATE TABLE IF NOT EXISTS purchase_details (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      product_name TEXT,
+      quantity INTEGER,
+      price REAL
     );
   ''');
   }
@@ -193,6 +205,36 @@ class DatabaseHelper {
       );
     } catch (e) {
       print('Error updating quantity: $e');
+      rethrow;
+    }
+  }
+
+  Future<void> savePurchaseDetails(
+      double totalAmount, List<Map<String, dynamic>> cartItems) async {
+    final Database db = await database;
+    for (var item in cartItems) {
+      await db.insert(
+        'purchase_details',
+        {
+          'product_name': item['productName'],
+          'quantity': item['quantity'],
+          'price': item['price'],
+        },
+      );
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> getPurchaseDetails() async {
+    final Database db = await database;
+    return await db.query('purchase_details');
+  }
+
+  Future<void> clearCart() async {
+    try {
+      final Database db = await database;
+      await db.delete('cart');
+    } catch (e) {
+      print('Error clearing cart: $e');
       rethrow;
     }
   }

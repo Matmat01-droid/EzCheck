@@ -1,6 +1,5 @@
 import 'package:ezcheck_app/helper/db_helper.dart';
 import 'package:ezcheck_app/screens/cart_screen.dart';
-import 'package:ezcheck_app/screens/dashboard.dart';
 import 'package:ezcheck_app/screens/terms.dart';
 import 'package:flutter/material.dart';
 
