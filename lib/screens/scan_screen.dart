@@ -265,7 +265,6 @@ class _ScanScreenState extends State<ScanScreen> {
     ];
   }
 
-// Updated function for barcode comparison
   bool _areBarcodesEqual(String barcode1, String barcode2) {
     String cleanedBarcode1 = _cleanBarcode(barcode1);
     String cleanedBarcode2 = _cleanBarcode(barcode2);
@@ -282,8 +281,24 @@ class _ScanScreenState extends State<ScanScreen> {
   void _startBarcodeScanning() {
     setState(() {
       // Access barcode through the context parameter
-      _scanBarcodeFuture = Provider.of<BarcodeProvider>(context, listen: false)
-          .scanBarcodeNormal();
+      Provider.of<BarcodeProvider>(context, listen: false)
+          .scanBarcodeNormal()
+          .then((_) {
+        // Check if the scanned barcode is in the product list
+        String scannedBarcode =
+            Provider.of<BarcodeProvider>(context, listen: false).barcodeScanRes;
+        Product? foundProduct = getProductByBarcode(scannedBarcode);
+
+        if (foundProduct != null &&
+            _areBarcodesEqual(foundProduct.barcode, scannedBarcode)) {
+          // Product found, navigate to details screen
+          navigateToProductDetails(foundProduct);
+        } else {
+          // Product not found or barcode does not match, show the "Product Not Available" dialog
+          showProductNotAvailableDialog(context);
+        }
+      });
+
       _barcodeController.text = ''; // Clear the previous barcode
     });
   }
