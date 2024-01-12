@@ -105,6 +105,7 @@ flutter:
     - assets/images/fresca tuna.jpg
     - assets/images/argentina.jpg
     - assets/images/king cup.jpg
+    - assets/images/empty cart.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
   # For details regarding adding assets from package dependencies, see

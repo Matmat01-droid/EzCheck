@@ -1,5 +1,9 @@
 import 'package:ezcheck_app/helper/db_helper.dart';
+import 'package:ezcheck_app/screens/account_screen.dart';
+import 'package:ezcheck_app/screens/history_screen.dart';
 import 'package:ezcheck_app/screens/payment.dart';
+import 'package:ezcheck_app/screens/scan_screen.dart';
+import 'package:ezcheck_app/screens/shop_now_screen.dart';
 import 'package:flutter/material.dart';
 
 class CartScreen extends StatefulWidget {
@@ -73,97 +77,214 @@ class _CartScreenState extends State<CartScreen> {
         title: Text('Shopping Cart'),
         backgroundColor: Color(0xFF31434F),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: <Widget>[
-              if (cartItems.isNotEmpty)
-                Column(
-                  children: cartItems.map((item) {
-                    // Check if price is not null before calculating total price
-                    double totalPrice =
-                        item['quantity'] * (item['price'] ?? 0.0);
-
-                    return Card(
-                      margin: EdgeInsets.all(10),
-                      child: ListTile(
-                        title: Text('Product: ${item['productName']}'),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text('Quantity: '),
-                                Row(
-                                  children: [
-                                    IconButton(
-                                      icon: Icon(Icons.remove),
-                                      onPressed: () {
-                                        _updateQuantity(
-                                            item['id'], item['quantity'] - 1);
-                                      },
-                                    ),
-                                    Text('${item['quantity']}'),
-                                    IconButton(
-                                      icon: Icon(Icons.add),
-                                      onPressed: () {
-                                        _updateQuantity(
-                                            item['id'], item['quantity'] + 1);
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            Text(
-                                'Total Price: ₱${totalPrice.toStringAsFixed(2)}'),
-                          ],
-                        ),
-                        trailing: IconButton(
-                          icon: Icon(Icons.delete),
-                          onPressed: () {
-                            _confirmDelete(item['id']);
-                          },
-                        ),
-                      ),
-                    );
-                  }).toList(),
-                ),
-              SizedBox(height: 10),
-              Text(
-                'Total Price: ₱${calculateTotalPrice().toStringAsFixed(2)}',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      drawer: Drawer(
+        child: ListView(
+          children: [
+            ListTile(
+              leading: Icon(
+                Icons.person_2_rounded,
+                color: Color(0xFF31434F),
               ),
-              SizedBox(height: 20),
-              Column(
+              title: Text('Account'),
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: ((context) => AccountScreen())),
+              ),
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.history,
+                color: Color(0xFF31434F),
+              ),
+              title: Text('History'),
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: ((context) => HistoryScreen(
+                        totalAmount: 0.0,
+                        cartItems: [],
+                      )),
+                ),
+              ),
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.shopping_bag,
+                color: Color(0xFF31434F),
+              ),
+              title: Text('Shop Now'),
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: ((context) => ShopNowScreen()),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+      body: Column(
+        children: [
+          Card(
+            margin: EdgeInsets.all(10),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  Center(
+                    child: Text(
+                      'Total Amount: ₱${calculateTotalPrice().toStringAsFixed(2)}',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  SizedBox(height: 10),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       primary: Color(0xFF31434F),
                     ),
                     onPressed: () async {
-                      List<Map<String, dynamic>> currentCartItems =
-                          await DatabaseHelper().getCartItems();
-                      double totalPrice = calculateTotalPrice();
-                      _proceedToPayment(totalPrice, currentCartItems);
+                      if (cartItems.isEmpty) {
+                        _showEmptyCartDialog();
+                      } else {
+                        List<Map<String, dynamic>> currentCartItems =
+                            await DatabaseHelper().getCartItems();
+                        double totalPrice = calculateTotalPrice();
+                        _proceedToPayment(totalPrice, currentCartItems);
+                      }
                     },
                     child: Text('Proceed to Payment'),
                   ),
                 ],
               ),
-            ],
+            ),
           ),
-        ),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: <Widget>[
+                    if (cartItems.isNotEmpty)
+                      Column(
+                        children: cartItems.map((item) {
+                          double totalPrice =
+                              item['quantity'] * (item['price'] ?? 0.0);
+
+                          return Card(
+                            margin: EdgeInsets.all(10),
+                            child: ListTile(
+                              title: Text(
+                                '${item['productName']}',
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.w700),
+                              ),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Price: ₱${item['price'].toStringAsFixed(2)}',
+                                    style: TextStyle(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text('Quantity: '),
+                                      Row(
+                                        children: [
+                                          IconButton(
+                                            icon: Icon(
+                                                Icons.remove_circle_outline),
+                                            onPressed: () {
+                                              _updateQuantity(item['id'],
+                                                  item['quantity'] - 1);
+                                            },
+                                          ),
+                                          Text('${item['quantity']}'),
+                                          IconButton(
+                                            icon:
+                                                Icon(Icons.add_circle_outline),
+                                            onPressed: () {
+                                              _updateQuantity(item['id'],
+                                                  item['quantity'] + 1);
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  Text(
+                                    'Total Price: ₱${totalPrice.toStringAsFixed(2)}',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xFF31434F)),
+                                  ),
+                                ],
+                              ),
+                              trailing: IconButton(
+                                icon: Icon(
+                                  Icons.delete,
+                                  color: Color(0xFF31434F),
+                                ),
+                                onPressed: () {
+                                  _confirmDelete(item['id']);
+                                },
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      )
+                    else
+                      Center(
+                        child: Column(
+                          children: [
+                            const SizedBox(
+                              height: 120,
+                            ),
+                            Image.asset(
+                              'assets/images/empty cart.png',
+                              width: 60,
+                              height: 60,
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              'Cart is empty.',
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.w300),
+                            )
+                          ],
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ScanScreen(),
+            ),
+          );
+        },
+        child: Icon(Icons.qr_code_scanner),
+        backgroundColor: Color(0xFF31434F),
       ),
     );
   }
 
   Future<void> _updateQuantity(int itemId, int newQuantity) async {
-    await DatabaseHelper().updateCartItemQuantity(itemId, newQuantity);
-    loadCartItems();
+    if (newQuantity > 0) {
+      await DatabaseHelper().updateCartItemQuantity(itemId, newQuantity);
+      loadCartItems();
+    }
   }
 
   Future<void> _proceedToPayment(
@@ -174,6 +295,27 @@ class _CartScreenState extends State<CartScreen> {
         builder: (context) =>
             PaymentScreen(totalAmount: totalPrice, cartItems: currentCartItems),
       ),
+    );
+  }
+
+  Future<void> _showEmptyCartDialog() async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Empty Cart'),
+          content: Text(
+              'Please add a product to your cart before proceeding to payment.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

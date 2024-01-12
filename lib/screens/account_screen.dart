@@ -12,7 +12,7 @@ class AccountScreen extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          // mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
@@ -21,24 +21,32 @@ class AccountScreen extends StatelessWidget {
             ),
             SizedBox(height: 20),
             Text(
-              'Name: John Doe',
+              'Name: ',
               style: TextStyle(fontSize: 18),
             ),
             Text(
-              'Email: john.doe@example.com',
+              'Email: ',
               style: TextStyle(fontSize: 18),
             ),
             SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => LoginPage(),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Color(0xFF31434F),
                   ),
-                );
-              },
-              child: Text('Logout'),
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => LoginPage(),
+                      ),
+                    );
+                  },
+                  child: Text('Logout'),
+                ),
+              ],
             ),
           ],
         ),

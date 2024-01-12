@@ -1,4 +1,4 @@
-import 'package:ezcheck_app/helper/db_helper.dart'; // Import your database helper
+import 'package:ezcheck_app/helper/db_helper.dart';
 import 'package:ezcheck_app/models/user.dart';
 import 'package:ezcheck_app/screens/onboard_screen.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +39,6 @@ class RegisterPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-
                 Column(
                   children: [
                     Image.asset('assets/images/EzCheckText1.png'),
@@ -109,13 +108,10 @@ class RegisterPage extends StatelessWidget {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(primary: Color(0xFF31434F)),
                     onPressed: () async {
-                      // Check if passwords match
                       if (passwordController.text ==
                           confirmPasswordController.text) {
-                        // Call the registration method from the DatabaseHelper
                         await _registerUser(context);
                       } else {
-                        // Show an error message if passwords don't match
                         _showErrorDialog(context, 'Passwords do not match.');
                       }
                     },
@@ -172,17 +168,11 @@ class RegisterPage extends StatelessWidget {
     User user = User(fullname: fullName, email: email, password: password);
 
     print('User to be registered: $user');
-
-    // Call the registration method from the DatabaseHelper
     DatabaseHelper dbHelper = DatabaseHelper();
     int result = await dbHelper.registerUser(user);
 
     print('Registration result: $result');
-
-    // Check the result and navigate accordingly
     if (result > 0) {
-      // Registration successful
-      // You can navigate to the main screen or perform other actions
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -190,8 +180,6 @@ class RegisterPage extends StatelessWidget {
         ),
       );
     } else {
-      // Registration failed
-      // You can show an error message or handle it accordingly
       _showErrorDialog(context, 'Registration failed. Please try again.');
     }
   }

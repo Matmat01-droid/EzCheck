@@ -1,6 +1,7 @@
 import 'package:ezcheck_app/intro_screens/intro.page3.dart';
 import 'package:ezcheck_app/intro_screens/intro_page1.dart';
 import 'package:ezcheck_app/intro_screens/intro_page2.dart';
+import 'package:ezcheck_app/screens/cart_screen.dart';
 import 'package:ezcheck_app/screens/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -13,15 +14,12 @@ class OnbordingScreen extends StatefulWidget {
 }
 
 class _OnbordingScreenState extends State<OnbordingScreen> {
-  // Controller to keep track of which page we're on
   PageController _controller = PageController();
-  // Variable to track if the last page is reached
   bool isLastPage = false;
 
   @override
   void initState() {
     super.initState();
-    //Listen to page changes to update the isLastPage variable
     _controller.addListener(() {
       setState(() {
         isLastPage = _controller.page == 2;
@@ -67,7 +65,7 @@ class _OnbordingScreenState extends State<OnbordingScreen> {
                   // Navigate to the next screen
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => MainScreen()),
+                    MaterialPageRoute(builder: (context) => CartScreen()),
                   );
                 } else {
                   _controller.nextPage(

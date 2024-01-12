@@ -1,4 +1,5 @@
 import 'package:ezcheck_app/helper/db_helper.dart';
+import 'package:ezcheck_app/screens/cart_screen.dart';
 import 'package:ezcheck_app/screens/dashboard.dart';
 import 'package:ezcheck_app/screens/terms.dart';
 import 'package:flutter/material.dart';
@@ -10,26 +11,21 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     TextEditingController emailController = TextEditingController();
     TextEditingController passwordController = TextEditingController();
-    DatabaseHelper dbHelper =
-        DatabaseHelper(); // Create an instance of DatabaseHelper
+    DatabaseHelper dbHelper = DatabaseHelper();
 
     void login() async {
-      // Replace this logic with your actual login logic
       String email = emailController.text;
       String password = passwordController.text;
 
-      // Example validation (replace with your own logic)
       bool success = await dbHelper.loginUser(email, password);
       if (success) {
-        // Login successful, navigate to the main screen
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => MainScreen(),
+            builder: (context) => CartScreen(),
           ),
         );
       } else {
-        // Show an error message or perform other actions on failed login
         showDialog(
           context: context,
           builder: (BuildContext context) {

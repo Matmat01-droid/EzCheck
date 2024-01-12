@@ -1,16 +1,25 @@
 // subcategory_screen.dart
 
+import 'package:ezcheck_app/screens/history_screen.dart';
 import 'package:ezcheck_app/screens/product_list.dart';
+import 'package:ezcheck_app/screens/scan_screen.dart';
+import 'package:ezcheck_app/screens/shop_now_screen.dart';
 import 'package:flutter/material.dart';
 
-class SubcategoryScreen extends StatelessWidget {
+class SubcategoryScreen extends StatefulWidget {
   final String mainCategory;
 
   SubcategoryScreen({Key? key, required this.mainCategory}) : super(key: key);
 
+  @override
+  State<SubcategoryScreen> createState() => _SubcategoryScreenState();
+}
+
+class _SubcategoryScreenState extends State<SubcategoryScreen> {
+  int _currentIndex = 0;
+
   List<Map<String, dynamic>> getSubcategories() {
-    // Function to get subcategories based on the selected main category
-    switch (mainCategory) {
+    switch (widget.mainCategory) {
       case 'Beverages':
         return [
           {'name': 'Powdered Drinks', 'icon': Icons.local_drink},
@@ -25,15 +34,12 @@ class SubcategoryScreen extends StatelessWidget {
         return [
           {'name': 'Chips', 'icon': Icons.fastfood},
           {'name': 'Chocolate', 'icon': Icons.fastfood},
-          // Add more subcategories for Snacks as needed
         ];
       case 'Pantry Supplies':
         return [
           {'name': 'Canned Goods', 'icon': Icons.food_bank},
           {'name': 'Frozen Foods', 'icon': Icons.free_breakfast},
-          // Add more subcategories for Pantry Supplies as needed
         ];
-      // Add cases for other categories as needed
       default:
         return [];
     }
@@ -45,7 +51,7 @@ class SubcategoryScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(mainCategory),
+        title: Text(widget.mainCategory),
         backgroundColor: const Color(0xFF31434F),
       ),
       body: Padding(
@@ -62,13 +68,12 @@ class SubcategoryScreen extends StatelessWidget {
             IconData subcategoryIcon = subcategories[index]['icon'];
             return GestureDetector(
               onTap: () {
-                // Handle subcategory click here
                 print('Subcategory tapped: $subcategoryName');
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => ProductListingScreen(
-                      mainCategory: mainCategory,
+                      mainCategory: widget.mainCategory,
                       subcategory: subcategoryName,
                     ),
                   ),
@@ -107,6 +112,60 @@ class SubcategoryScreen extends StatelessWidget {
             );
           },
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Color(0xFF31434F),
+        currentIndex: _currentIndex,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+          if (index == 0) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ShopNowScreen(),
+              ),
+            );
+          }
+          if (index == 1) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ScanScreen(),
+              ),
+            );
+          }
+          if (index == 2) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => HistoryScreen(
+                  totalAmount: 0.0,
+                  cartItems: [],
+                ),
+              ),
+            );
+          }
+        },
+        items: [
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.home),
+          //   label: 'Home',
+          // ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_bag),
+            label: 'Shop',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.barcode_reader),
+            label: 'Scan',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.history),
+            label: 'History',
+          ),
+        ],
       ),
     );
   }

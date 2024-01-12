@@ -1,3 +1,4 @@
+import 'package:ezcheck_app/screens/cart_screen.dart';
 import 'package:ezcheck_app/screens/dashboard.dart';
 import 'package:ezcheck_app/screens/scan_screen.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,7 @@ class HistoryScreen extends StatefulWidget {
 }
 
 class _HistoryScreenState extends State<HistoryScreen> {
-  int _currentIndex = 2; // Set the initial index for HistoryScreen
+  int _currentIndex = 2;
 
   @override
   Widget build(BuildContext context) {
@@ -27,9 +28,15 @@ class _HistoryScreenState extends State<HistoryScreen> {
         child: Column(
           // mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Total Amount: ₱${widget.totalAmount.toStringAsFixed(2)}'),
+            Text(
+              'Total Amount: ₱${widget.totalAmount.toStringAsFixed(2)}',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+            ),
             SizedBox(height: 20),
-            Text('Purchase Details:'),
+            Text(
+              'Purchase Details:',
+              style: TextStyle(fontWeight: FontWeight.w700),
+            ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: widget.cartItems.map((item) {
@@ -53,7 +60,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
         backgroundColor: Color(0xFF31434F),
         currentIndex: _currentIndex,
         onTap: (index) {
-          // Handle item taps to navigate to other screens if needed
           if (index != _currentIndex) {
             setState(() {
               _currentIndex = index;
@@ -63,7 +69,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MainScreen(),
+                    builder: (context) => CartScreen(),
                   ),
                 );
                 break;
@@ -75,14 +81,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
                   ),
                 );
                 break;
-              // For the 'History' item (index 2), we are already on the HistoryScreen
             }
           }
         },
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
+            icon: Icon(Icons.shopping_cart_checkout),
+            label: 'My Cart',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.barcode_reader),

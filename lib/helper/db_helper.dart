@@ -34,20 +34,17 @@ class DatabaseHelper {
       );
     } catch (e) {
       print('Error initializing database: $e');
-      rethrow; // Rethrow the exception after logging it.
+      rethrow;
     }
   }
 
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
     if (oldVersion < newVersion) {
-      // Check if the table exists
       bool tableExists = await _tableExists(db, 'users');
 
       if (tableExists) {
-        // If the table exists, alter it
         await db.execute('ALTER TABLE users ADD COLUMN new_column TEXT;');
       } else {
-        // If the table doesn't exist, create it
         await _createDb(db, newVersion);
       }
     }
@@ -85,7 +82,8 @@ class DatabaseHelper {
       name TEXT,
       description TEXT,
       price REAL,
-      imageUrl TEXT
+      imageUrl TEXT,
+      barcode TEXT
     );
   ''');
   }
@@ -109,9 +107,7 @@ class DatabaseHelper {
     );
 
     if (result.isNotEmpty) {
-      // Convert the map to a User object
       User user = User.fromMap(result.first);
-      // Now you have access to user.id, user.username, etc.
       return true;
     } else {
       return false;

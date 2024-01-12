@@ -3,6 +3,7 @@ class Product {
   final String description;
   final double price;
   final String imageUrl;
+  final String barcode; // Add the barcode field
   int quantity;
 
   Product({
@@ -10,6 +11,7 @@ class Product {
     required this.description,
     required this.price,
     required this.imageUrl,
+    required this.barcode, // Initialize the barcode in the constructor
     this.quantity = 0,
   });
 
@@ -19,6 +21,7 @@ class Product {
       'description': description,
       'price': price,
       'imageUrl': imageUrl,
+      'barcode': barcode, // Include barcode in the map
       'quantity': quantity,
     };
   }

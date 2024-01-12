@@ -13,6 +13,8 @@ class ScanScreen extends StatefulWidget {
 }
 
 class _ScanScreenState extends State<ScanScreen> {
+  late Future<void> _scanBarcodeFuture = Future.value(); // Initialize here
+
   @override
   Widget build(BuildContext context) {
     return Consumer<BarcodeProvider>(builder: (context, barcode, child) {
@@ -25,27 +27,33 @@ class _ScanScreenState extends State<ScanScreen> {
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
-            barcode.scanBarcodeNormal();
-            navigateToProductDetails(barcode.barcodeScanRes);
+            setState(() {
+              // Reset the future to trigger a new scan
+              _scanBarcodeFuture = barcode.scanBarcodeNormal();
+            });
           },
           label: Row(
             children: const [
-              Icon(Icons.qr_code),
+              Icon(Icons.qr_code_scanner),
               SizedBox(width: 6),
               Text(
-                "Scan",
+                "Scan Products",
                 style: TextStyle(fontSize: 16),
               )
             ],
           ),
+          backgroundColor: Color(0xFF31434F),
         ),
         body: SafeArea(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
-                "Scanned Code",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              Center(
+                child: const Text(
+                  "Scanned Code",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
               ),
               Container(
                 constraints: BoxConstraints(minHeight: 108),
@@ -57,9 +65,44 @@ class _ScanScreenState extends State<ScanScreen> {
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(color: primary),
                 ),
-                child: SelectableText(
-                  barcode.barcodeScanRes,
-                  style: const TextStyle(fontSize: 16),
+                child: FutureBuilder<void>(
+                  future: _scanBarcodeFuture,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      // Scanning is complete, display the barcode
+                      return TextField(
+                        controller:
+                            TextEditingController(text: barcode.barcodeScanRes),
+                        style: const TextStyle(fontSize: 16),
+                        readOnly: false,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                        ),
+                      );
+                    } else if (snapshot.hasError) {
+                      // Handle error during scanning
+                      return Text("Error: ${snapshot.error}");
+                    } else {
+                      // Scanning is in progress, show a loading indicator
+                      return CircularProgressIndicator();
+                    }
+                  },
+                ),
+              ),
+              SizedBox(
+                height: 1,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 15),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Color(0xFF31434F),
+                  ),
+                  onPressed: () {
+                    // Implement the logic for manual scanning
+                    // You can open a dialog or navigate to a manual scanning screen
+                  },
+                  child: Text("View All Products"),
                 ),
               ),
             ],

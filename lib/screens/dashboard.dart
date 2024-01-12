@@ -145,7 +145,7 @@ class _MainScreenState extends State<MainScreen> {
               context,
               MaterialPageRoute(
                 builder: (context) => HistoryScreen(
-                  totalAmount: 0.0, // Pass the appropriate total amount
+                  totalAmount: 0.0,
                   cartItems: [],
                 ),
               ),

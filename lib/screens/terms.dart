@@ -37,7 +37,7 @@ We collect data and personal information which include, but are not limited to, 
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    RegisterPage())); // Return true to indicate agreement
+                                    RegisterPage()));
                       },
                       child: Text('Agree and Continue'),
                     ),

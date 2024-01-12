@@ -7,9 +7,6 @@ class ScannedProductDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Add your logic to fetch product details based on the scanned barcode
-    // For demonstration purposes, I'm displaying the barcode as the product details.
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Scanned Product Details'),
@@ -25,11 +22,8 @@ class ScannedProductDetailsScreen extends StatelessWidget {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 16),
-            // Add more product details widgets here based on your data
-            // For example:
             Text('Product Name: ...'),
             Text('Price: ...'),
-            // ... other product details
           ],
         ),
       ),

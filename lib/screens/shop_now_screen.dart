@@ -1,16 +1,24 @@
-// shop_now_screen.dart
-
+import 'package:ezcheck_app/screens/cart_screen.dart';
+import 'package:ezcheck_app/screens/history_screen.dart';
+import 'package:ezcheck_app/screens/scan_screen.dart';
 import 'package:ezcheck_app/screens/subcategory.dart';
 import 'package:flutter/material.dart';
 
-class ShopNowScreen extends StatelessWidget {
-  const ShopNowScreen({Key? key});
+class ShopNowScreen extends StatefulWidget {
+  ShopNowScreen({Key? key});
+
+  @override
+  State<ShopNowScreen> createState() => _ShopNowScreenState();
+}
+
+class _ShopNowScreenState extends State<ShopNowScreen> {
+  int _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Shop Now'),
+        title: const Text('All'),
         backgroundColor: const Color(0xFF31434F),
       ),
       body: Padding(
@@ -25,9 +33,62 @@ class ShopNowScreen extends StatelessWidget {
                 context, 'Cleaning Supplies', Icons.cleaning_services),
             _buildCategory(context, 'Snacks', Icons.food_bank),
             _buildCategory(context, 'Pantry Supplies', Icons.breakfast_dining),
-            // Add more categories as needed
           ],
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Color(0xFF31434F),
+        currentIndex: _currentIndex,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+          if (index == 0) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CartScreen(),
+              ),
+            );
+          }
+          if (index == 1) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ScanScreen(),
+              ),
+            );
+          }
+          if (index == 2) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => HistoryScreen(
+                  totalAmount: 0.0,
+                  cartItems: [],
+                ),
+              ),
+            );
+          }
+        },
+        items: [
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.home),
+          //   label: 'Home',
+          // ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_cart_checkout),
+            label: 'Cart',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.qr_code_scanner),
+            label: 'Scan',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.history),
+            label: 'History',
+          ),
+        ],
       ),
     );
   }

@@ -15,7 +15,7 @@ class CategoryDetailsScreen extends StatefulWidget {
 
 class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
   final DatabaseHelper dbHelper = DatabaseHelper();
-  late List<Product> products = []; // Initialize products as an empty list
+  late List<Product> products = []; 
 
   @override
   void initState() {
@@ -39,6 +39,7 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
                 description: data['description'],
                 price: data['price'],
                 imageUrl: data['imageUrl'],
+                barcode: data ['barcode'],
               ))
           .toList();
     });
@@ -59,7 +60,6 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
             title: Text(product.name),
             subtitle: Text('${product.description}\n\$${product.price}'),
             onTap: () async {
-              // Handle product click, e.g., navigate to product details screen
               print('Product clicked: ${product.name}');
               // Example: Navigate to a new screen
               await Navigator.push(

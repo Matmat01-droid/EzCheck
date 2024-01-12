@@ -1,8 +1,7 @@
-// ... Existing imports ...
-
 import 'package:ezcheck_app/helper/db_helper.dart';
 import 'package:ezcheck_app/models/products.dart';
 import 'package:ezcheck_app/screens/cart_screen.dart';
+import 'package:ezcheck_app/screens/shop_now_screen.dart';
 import 'package:flutter/material.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
@@ -18,7 +17,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   int quantity = 1;
 
   void showAddToCartDialog(BuildContext context) async {
-    // Show a dialog when the user presses the "Add to Cart" button
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -28,27 +26,33 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               '${widget.product.name} added to your cart. Quantity: $quantity'),
           actions: [
             TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+              onPressed: () async {
+                await DatabaseHelper().addToCart(
+                    widget.product.name, quantity, widget.product.price);
+                Navigator.of(context).pop();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ShopNowScreen(),
+                  ),
+                );
               },
               child: Text('OK'),
             ),
             TextButton(
-  onPressed: () async {
-    // Add the product to the cart
-   await DatabaseHelper().addToCart(widget.product.name, quantity,widget.product.price);
-    Navigator.of(context).pop(); // Close the dialog
-    // Navigate to the cart screen
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => CartScreen(),
-      ),
-    );
-  },
-  child: Text('View Cart'),
-),
-
+              onPressed: () async {
+                await DatabaseHelper().addToCart(
+                    widget.product.name, quantity, widget.product.price);
+                Navigator.of(context).pop();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CartScreen(),
+                  ),
+                );
+              },
+              child: Text('View Cart'),
+            ),
           ],
         );
       },
@@ -81,6 +85,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             Text(widget.product.description),
             SizedBox(height: 16.0),
             Text(
+              'Barcode: ${widget.product.barcode}',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15.0),
+            ),
+            SizedBox(height: 16.0),
+            Text(
               'Price: ₱${widget.product.price.toStringAsFixed(2)}',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
             ),
@@ -95,7 +104,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 Row(
                   children: [
                     IconButton(
-                      icon: Icon(Icons.remove),
+                      icon: Icon(Icons.remove_circle_outline),
                       onPressed: () {
                         if (quantity > 1) {
                           setState(() {
@@ -109,7 +118,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       style: TextStyle(fontSize: 16.0),
                     ),
                     IconButton(
-                      icon: Icon(Icons.add),
+                      icon: Icon(Icons.add_circle_outline),
                       onPressed: () {
                         setState(() {
                           quantity++;
@@ -129,10 +138,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     primary: Color(0xFF31434F),
                   ),
                   onPressed: () async {
-                    // Handle adding to cart logic here
                     print(
                         'Added ${widget.product.name} to the cart. Quantity: $quantity');
-                    // Show the custom dialog
                     showAddToCartDialog(context);
                   },
                   child: Text('Add to Cart'),

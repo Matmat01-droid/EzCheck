@@ -39,13 +39,14 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     double totalPrice =
                         item['quantity'] * (item['price'] ?? 0.0);
                     return ListTile(
-                      title: Text('Product: ${item['productName']}'),
+                      title: Text('${item['productName']}'),
+                      trailing: Text(' ₱${totalPrice.toStringAsFixed(2)}'),
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text('Quantity: ${item['quantity']}'),
-                          Text(
-                              'Total Price: ₱${totalPrice.toStringAsFixed(2)}'),
+                          // Text(
+                          //     'Total Price: ₱${totalPrice.toStringAsFixed(2)}'),
                         ],
                       ),
                     );
@@ -164,7 +165,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   primary: Color(0xFF31434F),
                 ),
                 onPressed: () {
-                  moveToHistoryScreen(context); // Ensure passing the context
+                  moveToHistoryScreen(context);
                 },
                 child: Text('View Purchase History'),
               ),
