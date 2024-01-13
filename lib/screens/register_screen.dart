@@ -8,7 +8,8 @@ class RegisterPage extends StatelessWidget {
   RegisterPage({Key? key});
 
   // Controller for the text fields
-  final TextEditingController fullNameController = TextEditingController();
+  final TextEditingController firstNameController = TextEditingController();
+  final TextEditingController lastNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController =
@@ -22,7 +23,7 @@ class RegisterPage extends StatelessWidget {
         child: Center(
           child: Container(
             width: 400,
-            height: 500,
+            height: 550,
             padding: const EdgeInsets.all(16.0),
             decoration: BoxDecoration(
               color: Colors.white,
@@ -54,9 +55,21 @@ class RegisterPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 15),
                 TextField(
-                  controller: fullNameController,
+                  controller: firstNameController,
                   decoration: InputDecoration(
-                    labelText: 'Full Name',
+                    labelText: 'First Name',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    filled: true,
+                    fillColor: Colors.white.withOpacity(1.0),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                TextField(
+                  controller: lastNameController,
+                  decoration: InputDecoration(
+                    labelText: 'Last Name',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -160,12 +173,12 @@ class RegisterPage extends StatelessWidget {
 
   Future<void> _registerUser(BuildContext context) async {
     // Get user input
-    String fullName = fullNameController.text;
+    String firstName = firstNameController.text;
     String email = emailController.text;
     String password = passwordController.text;
 
     // Create a User object
-    User user = User(fullname: fullName, email: email, password: password);
+    User user = User(fullname: firstName, email: email, password: password);
 
     print('User to be registered: $user');
     DatabaseHelper dbHelper = DatabaseHelper();

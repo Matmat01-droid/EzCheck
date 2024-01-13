@@ -255,7 +255,7 @@ class _ScanScreenState extends State<ScanScreen> {
           description: 'King Cup Sardine 155g',
           price: 20.00,
           imageUrl: 'assets/images/king cup.jpg',
-          barcode: '8901234565'),
+          barcode: '4800193101135'),
       Product(
           name: '555 Sardines',
           description: '555 Sardines 155g',

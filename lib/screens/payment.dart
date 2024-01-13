@@ -136,13 +136,19 @@ class _PaymentScreenState extends State<PaymentScreen> {
           title: Text('Confirm Payment'),
           content: Text('Are you sure you want to proceed with the payment?'),
           actions: [
-            TextButton(
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: Color(0xFF31434F),
+              ),
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
               },
               child: Text('Cancel'),
             ),
-            TextButton(
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: Color(0xFF31434F),
+              ),
               onPressed: () {
                 Navigator.of(context).pop(); // Close the confirmation dialog
                 showPaymentSuccessDialog(context);
@@ -180,8 +186,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   primary: Color(0xFF31434F),
                 ),
                 onPressed: () async {
-                moveToHistoryScreen(context);
-                await DatabaseHelper().clearCart();
+                  moveToHistoryScreen(context);
+                  await DatabaseHelper().clearCart();
                 },
                 child: Text('View Purchase History'),
               ),
@@ -189,7 +195,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 style: ElevatedButton.styleFrom(
                   primary: Color(0xFF31434F),
                 ),
-                onPressed: () async{
+                onPressed: () async {
                   await DatabaseHelper().clearCart();
                   Navigator.of(context).push(
                       MaterialPageRoute(builder: (context) => CartScreen()));

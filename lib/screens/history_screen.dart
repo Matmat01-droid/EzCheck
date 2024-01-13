@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:ezcheck_app/screens/cart_screen.dart';
 import 'package:ezcheck_app/screens/scan_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HistoryScreen extends StatefulWidget {
@@ -19,12 +20,10 @@ class HistoryScreen extends StatefulWidget {
   _HistoryScreenState createState() => _HistoryScreenState();
 }
 
-// ... (your existing imports)
-
 class _HistoryScreenState extends State<HistoryScreen> {
   int _currentIndex = 2;
   List<Map<String, dynamic>> purchaseHistory = [];
-  bool isUndoVisible = false; // Track whether to show the undo button
+  bool isDismissible = false; // Track whether items should be dismissible
 
   @override
   void initState() {
@@ -42,6 +41,11 @@ class _HistoryScreenState extends State<HistoryScreen> {
         .map<Map<String, dynamic>>((jsonString) => jsonDecode(jsonString))
         .toList();
 
+    // Set the current date for items with a null 'date' property
+    history.forEach((purchase) {
+      purchase['date'] ??= DateTime.now().toString();
+    });
+
     setState(() {
       purchaseHistory = history;
     });
@@ -53,17 +57,26 @@ class _HistoryScreenState extends State<HistoryScreen> {
       appBar: AppBar(
         title: Text('Purchase History'),
         backgroundColor: Color(0xFF31434F),
+        actions: [
+          IconButton(
+            icon: isDismissible
+                ? Icon(Icons
+                    .check) // Change icon to check when isDismissible is true
+                : Icon(Icons.delete), // Otherwise, show delete icon
+            onPressed: () {
+              setState(() {
+                // Toggle dismissible items when the delete icon is clicked
+                isDismissible = !isDismissible;
+              });
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Text(
-            //   'Total Amount: ₱${widget.totalAmount.toStringAsFixed(2)}',
-            //   style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-            // ),
-            // SizedBox(height: 20),
             Text(
               'Purchase Details:',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
@@ -81,34 +94,23 @@ class _HistoryScreenState extends State<HistoryScreen> {
                               .toList() ??
                           [];
 
+                  // Format the date using the intl package
+                  String formattedDate = _formatDate(purchase['date']);
+
                   return Dismissible(
                     key: UniqueKey(),
                     onDismissed: (direction) {
-                      setState(() {
-                        // Remove the item from the data source
-                        purchaseHistory.removeAt(index);
-                        // Update SharedPreferences
-                        updatePurchaseHistory();
-                        // Show the undo button
-                        isUndoVisible = true;
-                      });
+                      _removeItem(index);
 
-                      // Show a snackbar
+                      // Show Snackbar with Undo button
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text('Purchase dismissed'),
+                          content: Text('Purchase deleted'),
                           duration: Duration(seconds: 2),
                           action: SnackBarAction(
                             label: 'Undo',
                             onPressed: () {
-                              setState(() {
-                                // Add the item back to the data source
-                                purchaseHistory.insert(index, purchase);
-                                // Update SharedPreferences
-                                updatePurchaseHistory();
-                                // Hide the undo button
-                                isUndoVisible = false;
-                              });
+                              _addItem(index, purchase);
                             },
                           ),
                         ),
@@ -137,11 +139,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                     fontSize: 16, fontWeight: FontWeight.bold),
                               ),
                             ),
-                            // SizedBox(height: 10),
-                            // Text(
-                            //   'Purchase Details:',
-                            //   style: TextStyle(fontWeight: FontWeight.w500),
-                            // ),
                             SizedBox(height: 5),
                             // Display individual cart items for this purchase
                             ...cartItems.map((item) {
@@ -156,7 +153,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                         fontWeight: FontWeight.bold,
                                         fontSize: 18),
                                   ),
-                                  // SizedBox(height: 3),
                                   Text('Quantity: ${item['quantity']}'),
                                   Text(
                                     'Total Price: ₱${totalPrice.toStringAsFixed(2)}',
@@ -167,10 +163,26 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                 ],
                               );
                             }).toList(),
+
+                            // Display the date in the trailing
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Date of Purchase: $formattedDate',
+                                  style: TextStyle(fontWeight: FontWeight.w500),
+                                ),
+                              ],
+                            ),
                           ],
                         ),
                       ),
                     ),
+                    // Set dismissible property dynamically
+                    // based on the isDismissible variable
+                    direction: isDismissible
+                        ? DismissDirection.endToStart
+                        : DismissDirection.none,
                   );
                 },
               ),
@@ -224,9 +236,42 @@ class _HistoryScreenState extends State<HistoryScreen> {
     );
   }
 
+  // Helper function to format the date
+  String _formatDate(String? dateString) {
+    try {
+      if (dateString != null) {
+        DateTime date = DateTime.parse(dateString);
+        return DateFormat('MMM dd yyyy').format(date);
+      }
+    } catch (e) {
+      print('Error formatting date: $e');
+    }
+    return 'Invalid Date';
+  }
+
+  // Function to remove an item from the list
+  void _removeItem(int index) {
+    setState(() {
+      purchaseHistory.removeAt(index);
+    });
+    updatePurchaseHistory();
+  }
+
+  // Function to add an item back to the list
+  void _addItem(int index, Map<String, dynamic> item) {
+    setState(() {
+      purchaseHistory.insert(index, item);
+    });
+    updatePurchaseHistory();
+  }
+
   // Function to update SharedPreferences with the modified purchaseHistory
   Future<void> updatePurchaseHistory() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    // Add the current date to each purchase item
+    purchaseHistory.forEach((purchase) {
+      purchase['date'] = DateTime.now().toString();
+    });
     List<String> purchaseHistoryStrings =
         purchaseHistory.map((purchase) => jsonEncode(purchase)).toList();
     prefs.setStringList('purchaseHistory', purchaseHistoryStrings);
