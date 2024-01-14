@@ -67,47 +67,57 @@ flutter:
     - assets/images/EzCheckText1.png
     - assets/images/EzCheckText2.png
     - assets/Barcode-scanner-beep-sound.mp3
-    - assets/images/milo.jpg
-    - assets/images/bear brand.jpg
-    - assets/images/birch tree.jpg
-    - assets/images/kopiko.jpg
-    - assets/images/great taste.jpg
-    - assets/images/energen.jpg
-    - assets/images/tang.jpg
+    - assets/images/milo 35g.jpg
+    - assets/images/bear brand 320g.jpg
+    - assets/images/birch tree fortified 33g.jpg
+    - assets/images/kopiko 25g.jpg
+    - assets/images/great taste white caramel 30g.jpg
+    - assets/images/energen chocolate 30g.jpg
+    - assets/images/tang pineapple 25g.jpg
     - assets/images/joy dishwashing liquid.jpg
     - assets/images/smart dishwashing paste.jpg
     - assets/images/axion dishwashing paste.jpg
-    - assets/images/tide.jpg
-    - assets/images/pride.jpg
-    - assets/images/ariel.jpg
-    - assets/images/surf.jpg
-    - assets/images/calla.jpg
-    - assets/images/coca-cola.jpg
-    - assets/images/pepsi.jpg
-    - assets/images/sprite.jpg
-    - assets/images/royal.jpg
-    - assets/images/mountain dew.jpg
-    - assets/images/mirinda.jpg
-    - assets/images/piattos.jpg
-    - assets/images/nova.jpg
-    - assets/images/chippy.jpg
-    - assets/images/clover.jpg
-    - assets/images/goya.jpg
-    - assets/images/flat tops.jpg
-    - assets/images/choco mucho.jpg
-    - assets/images/beng beng.jpg
-    - assets/images/cream o.jpg
-    - assets/images/tender juicy.jpg
-    - assets/images/idol.jpg
-    - assets/images/funtastyk.jpg
-    - assets/images/bingo.jpg
-    - assets/images/youngs town.jpg
-    - assets/images/century tuna.jpg
-    - assets/images/fresca tuna.jpg
-    - assets/images/argentina.jpg
-    - assets/images/king cup.jpg
+    - assets/images/tide powder 720g.jpg
+    - assets/images/pride powder 500g.jpg
+    - assets/images/ariel powder 1kg.jpg
+    - assets/images/surf rose fresh 70g.jpg
+    - assets/images/calla powder 100g.jpg
+    - assets/images/coca-cola 1l.jpg
+    - assets/images/pepsi 1l.jpg
+    - assets/images/sprite 1l.jpg
+    - assets/images/royal 1.5l.jpg
+    - assets/images/mountain dew 1l.jpg
+    - assets/images/mirinda orange 1l.jpg
+    - assets/images/piattos cheese 85g.jpg
+    - assets/images/nova multigrain snack 40g.jpg
+    - assets/images/chippy bbq 110g.jpg
+    - assets/images/clover chips cheese 26g.jpg
+    - assets/images/goya milk chocolate 35g.jpg
+    - assets/images/flat tops 150g.jpg
+    - assets/images/choco mucho 32g.jpg
+    - assets/images/beng beng chocolate 32g.jpg
+    - assets/images/cream o vanilla chocolate cookies 10pcs.jpg
+    - assets/images/tender juicy jumbo 1kg.jpg
+    - assets/images/idol cheesedog regular 1kg.jpg
+    - assets/images/funtastyk young pork tocino 225g.jpg
+    - assets/images/bingo chicken nuggets 200g.jpg
+    - assets/images/youngs town sardines regular 155g.jpg
+    - assets/images/century tuna flakes in oil 155g.jpg
+    - assets/images/fresca tuna afritada 175g.jpg
+    - assets/images/argentina corned beef 150g.jpg
+    - assets/images/king cup sardines 155g.jpg
     - assets/images/empty cart.png
-    - assets/images/555 sardines.jpg
+    - assets/images/555 sardines 155g.jpg
+    - assets/images/alaska fortified 33g.jpg
+    - assets/images/mega sardines tomato sauce 155g.jpg
+    - assets/images/san marino corned tuna 150g.jpg
+    - assets/images/wow ulam asado 155g.jpg
+    - assets/images/coke mismo 300ml.jpg
+    - assets/images/royal mismo 250ml.jpg
+    - assets/images/martys cracklings salt and vinegar 26g.jpg
+    - assets/images/oishi cracklings 50g.jpg
+    - assets/images/oishi crispy patata 24g.jpg
+    - assets/images/oishi prawn crackers spicy 60g.jpg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
   # For details regarding adding assets from package dependencies, see
