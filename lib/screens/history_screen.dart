@@ -224,7 +224,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
             label: 'My Cart',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.barcode_reader),
+            icon: Icon(Icons.qr_code_scanner),
             label: 'Scan',
           ),
           BottomNavigationBarItem(

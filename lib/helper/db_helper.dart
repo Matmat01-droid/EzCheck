@@ -144,21 +144,50 @@ class DatabaseHelper {
   ''');
   }
 
-  Future<void> addToCart(String productName, int quantity, double price) async {
-    Database db = await database;
+Future<void> addToCart(String productName, int quantity, double price) async {
+  // Check if the product is already in the cart
+  List<Map<String, dynamic>> existingItem =
+      await _instance!.queryCartItemByName(productName);
+
+  if (existingItem.isNotEmpty) {
+    // Product already in the cart, update the quantity
+    int newQuantity = existingItem[0]['quantity'] + quantity;
+    await _instance!.updateCartItemQuantity(existingItem[0]['id'], newQuantity);
+  } else {
+    // Product not in the cart, insert a new item
+    await _instance!.insertCartItem(productName, quantity, price);
+  }
+}
+
+Future<List<Map<String, dynamic>>> queryCartItemByName(String productName) async {
+  Database db = await _instance!.database;
+  return await db.query(
+    'cart',  // Replace 'cart' with your actual table name
+    where: 'productName = ?',  // Replace 'productName' with your actual column name
+    whereArgs: [productName],
+  );
+}
+
+Future<void> insertCartItem(String productName, int quantity, double price) async {
+  try {
+    final Database db = await database;
+
     await db.insert(
-      'cart',
+      'cart',  // Replace 'cart' with your actual table name
       {
-        'productName': productName,
+        'productName': productName,  // Replace 'productName' with your actual column name
         'quantity': quantity,
         'price': price,
       },
-      conflictAlgorithm: ConflictAlgorithm.ignore,
     );
-
-    print(
-        'Added to cart: Product Name: $productName, Quantity: $quantity, Price: $price');
+  } catch (e) {
+    print('Error inserting item into cart: $e');
+    rethrow;
   }
+}
+
+
+
 
   Future<List<Map<String, dynamic>>> getCartItems() async {
     Database db = await database;

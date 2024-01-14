@@ -197,8 +197,7 @@ class _CartScreenState extends State<CartScreen> {
                                             icon: Icon(
                                                 Icons.remove_circle_outline),
                                             onPressed: () {
-                                              _updateQuantity(item['id'],
-                                                  item['quantity'] - 1);
+                                              _updateQuantity(item['id'], item['quantity'] - 1, item['price']);
                                             },
                                           ),
                                           Text('${item['quantity']}'),
@@ -206,8 +205,7 @@ class _CartScreenState extends State<CartScreen> {
                                             icon:
                                                 Icon(Icons.add_circle_outline),
                                             onPressed: () {
-                                              _updateQuantity(item['id'],
-                                                  item['quantity'] + 1);
+                                              _updateQuantity(item['id'], item['quantity'] + 1, item['price']);
                                             },
                                           ),
                                         ],
@@ -280,12 +278,26 @@ class _CartScreenState extends State<CartScreen> {
     );
   }
 
-  Future<void> _updateQuantity(int itemId, int newQuantity) async {
-    if (newQuantity > 0) {
-      await DatabaseHelper().updateCartItemQuantity(itemId, newQuantity);
-      loadCartItems();
-    }
+Future<void> _updateQuantity(int itemId, int newQuantity, double price) async {
+  if (newQuantity > 0) {
+    await DatabaseHelper().updateCartItemQuantity(itemId, newQuantity);
+
+    setState(() {
+      // Create a new list with the updated quantity
+      cartItems = cartItems.map((item) {
+        if (item['id'] == itemId) {
+          return {...item, 'quantity': newQuantity};
+        } else {
+          return item;
+        }
+      }).toList();
+    });
   }
+}
+
+
+
+
 
 Future<void> _proceedToPayment(
   double totalPrice, List<Map<String, dynamic>> currentCartItems) async {

@@ -141,7 +141,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 primary: Color(0xFF31434F),
               ),
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop(); 
               },
               child: Text('Cancel'),
             ),
@@ -150,7 +150,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 primary: Color(0xFF31434F),
               ),
               onPressed: () {
-                Navigator.of(context).pop(); // Close the confirmation dialog
+                Navigator.of(context).pop(); 
                 showPaymentSuccessDialog(context);
               },
               child: Text('Confirm'),
@@ -162,7 +162,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
   Future<void> savePurchaseDetails() async {
-    // Save the purchase details to the database
     await DatabaseHelper()
         .savePurchaseDetails(widget.totalAmount, widget.cartItems);
   }
@@ -181,16 +180,16 @@ class _PaymentScreenState extends State<PaymentScreen> {
             children: [
               Text('Thank you for your purchase!'),
               SizedBox(height: 10),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Color(0xFF31434F),
-                ),
-                onPressed: () async {
-                  moveToHistoryScreen(context);
-                  await DatabaseHelper().clearCart();
-                },
-                child: Text('View Purchase History'),
-              ),
+              // ElevatedButton(
+              //   style: ElevatedButton.styleFrom(
+              //     primary: Color(0xFF31434F),
+              //   ),
+              //   onPressed: () async {
+              //     moveToHistoryScreen(context);
+              //     await DatabaseHelper().clearCart();
+              //   },
+              //   child: Text('View Purchase History'),
+              // ),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   primary: Color(0xFF31434F),
@@ -218,18 +217,16 @@ class _PaymentScreenState extends State<PaymentScreen> {
             return jsonDecode(jsonString);
           } catch (e) {
             print("Error decoding JSON: $e");
-            return {}; // or any other default value
+            return {}; 
           }
         }).toList() ??
         [];
 
-    // Add the current purchase details
     purchaseHistory.add({
       'totalAmount': widget.totalAmount,
       'cartItems': widget.cartItems,
     });
 
-    // Convert the list of maps to a list of JSON strings
     List<String> purchaseHistoryStrings =
         purchaseHistory.map((purchase) => jsonEncode(purchase)).toList();
 
