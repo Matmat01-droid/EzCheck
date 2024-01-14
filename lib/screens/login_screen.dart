@@ -12,11 +12,9 @@ class LoginPage extends StatelessWidget {
     TextEditingController passwordController = TextEditingController();
     DatabaseHelper dbHelper = DatabaseHelper();
 
-    // Focus nodes
     final FocusNode emailFocus = FocusNode();
     final FocusNode passwordFocus = FocusNode();
 
-    // Login function
     void login() async {
       String email = emailController.text;
       String password = passwordController.text;

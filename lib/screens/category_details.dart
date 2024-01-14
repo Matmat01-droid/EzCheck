@@ -61,7 +61,6 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
             subtitle: Text('${product.description}\n\$${product.price}'),
             onTap: () async {
               print('Product clicked: ${product.name}');
-              // Example: Navigate to a new screen
               await Navigator.push(
                 context,
                 MaterialPageRoute(

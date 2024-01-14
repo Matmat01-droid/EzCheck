@@ -111,7 +111,7 @@ class DatabaseHelper {
   }
 
   Future<bool> loginUser(String email, String password) async {
-    Database db = await database; // Ensure the database is initialized
+    Database db = await database; 
     final List<Map<String, dynamic>> result = await db.query(
       'users',
       where: 'email = ? AND password = ?',
@@ -145,16 +145,16 @@ class DatabaseHelper {
   }
 
 Future<void> addToCart(String productName, int quantity, double price) async {
-  // Check if the product is already in the cart
+ 
   List<Map<String, dynamic>> existingItem =
       await _instance!.queryCartItemByName(productName);
 
   if (existingItem.isNotEmpty) {
-    // Product already in the cart, update the quantity
+    
     int newQuantity = existingItem[0]['quantity'] + quantity;
     await _instance!.updateCartItemQuantity(existingItem[0]['id'], newQuantity);
   } else {
-    // Product not in the cart, insert a new item
+    
     await _instance!.insertCartItem(productName, quantity, price);
   }
 }
@@ -162,8 +162,8 @@ Future<void> addToCart(String productName, int quantity, double price) async {
 Future<List<Map<String, dynamic>>> queryCartItemByName(String productName) async {
   Database db = await _instance!.database;
   return await db.query(
-    'cart',  // Replace 'cart' with your actual table name
-    where: 'productName = ?',  // Replace 'productName' with your actual column name
+    'cart',  
+    where: 'productName = ?', 
     whereArgs: [productName],
   );
 }
@@ -173,9 +173,9 @@ Future<void> insertCartItem(String productName, int quantity, double price) asyn
     final Database db = await database;
 
     await db.insert(
-      'cart',  // Replace 'cart' with your actual table name
+      'cart',  
       {
-        'productName': productName,  // Replace 'productName' with your actual column name
+        'productName': productName, 
         'quantity': quantity,
         'price': price,
       },

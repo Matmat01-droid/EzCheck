@@ -283,7 +283,6 @@ Future<void> _updateQuantity(int itemId, int newQuantity, double price) async {
     await DatabaseHelper().updateCartItemQuantity(itemId, newQuantity);
 
     setState(() {
-      // Create a new list with the updated quantity
       cartItems = cartItems.map((item) {
         if (item['id'] == itemId) {
           return {...item, 'quantity': newQuantity};
@@ -301,7 +300,6 @@ Future<void> _updateQuantity(int itemId, int newQuantity, double price) async {
 
 Future<void> _proceedToPayment(
   double totalPrice, List<Map<String, dynamic>> currentCartItems) async {
-  // Proceed to the payment screen
   bool paymentSuccess = await Navigator.push(
     context,
     MaterialPageRoute(
@@ -310,11 +308,8 @@ Future<void> _proceedToPayment(
     ),
   );
 
-  // Check if the payment was successful
   if (paymentSuccess == true) {
-    // Clear the cart if the payment was successful
     await DatabaseHelper().clearCart();
-    // Reload the cart items after clearing (optional, depending on your use case)
     await loadCartItems();
   }
 }
@@ -335,7 +330,7 @@ Future<void> _proceedToPayment(
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop(); 
               },
               child: Text('OK'),
             ),

@@ -242,7 +242,6 @@ Future<bool> _registerUser(BuildContext context) async {
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
-                // Proceed to the next screen or perform any other action
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(

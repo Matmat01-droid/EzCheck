@@ -23,7 +23,7 @@ class HistoryScreen extends StatefulWidget {
 class _HistoryScreenState extends State<HistoryScreen> {
   int _currentIndex = 2;
   List<Map<String, dynamic>> purchaseHistory = [];
-  bool isDismissible = false; // Track whether items should be dismissible
+  bool isDismissible = false; 
 
   @override
   void initState() {
@@ -36,12 +36,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
     List<String> purchaseHistoryStrings =
         prefs.getStringList('purchaseHistory') ?? [];
 
-    // Convert the list of JSON strings to a list of maps
     List<Map<String, dynamic>> history = purchaseHistoryStrings
         .map<Map<String, dynamic>>((jsonString) => jsonDecode(jsonString))
         .toList();
 
-    // Set the current date for items with a null 'date' property
     history.forEach((purchase) {
       purchase['date'] ??= DateTime.now().toString();
     });
@@ -61,11 +59,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
           IconButton(
             icon: isDismissible
                 ? Icon(Icons
-                    .check) // Change icon to check when isDismissible is true
-                : Icon(Icons.delete), // Otherwise, show delete icon
+                    .check) 
+                : Icon(Icons.delete),
             onPressed: () {
               setState(() {
-                // Toggle dismissible items when the delete icon is clicked
                 isDismissible = !isDismissible;
               });
             },
@@ -94,15 +91,12 @@ class _HistoryScreenState extends State<HistoryScreen> {
                               .toList() ??
                           [];
 
-                  // Format the date using the intl package
                   String formattedDate = _formatDate(purchase['date']);
 
                   return Dismissible(
                     key: UniqueKey(),
                     onDismissed: (direction) {
                       _removeItem(index);
-
-                      // Show Snackbar with Undo button
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text('Purchase deleted'),
@@ -163,8 +157,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                 ],
                               );
                             }).toList(),
-
-                            // Display the date in the trailing
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -178,8 +170,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
                         ),
                       ),
                     ),
-                    // Set dismissible property dynamically
-                    // based on the isDismissible variable
                     direction: isDismissible
                         ? DismissDirection.endToStart
                         : DismissDirection.none,
@@ -236,7 +226,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
     );
   }
 
-  // Helper function to format the date
+
   String _formatDate(String? dateString) {
     try {
       if (dateString != null) {
@@ -249,7 +239,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
     return 'Invalid Date';
   }
 
-  // Function to remove an item from the list
   void _removeItem(int index) {
     setState(() {
       purchaseHistory.removeAt(index);
@@ -257,7 +246,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
     updatePurchaseHistory();
   }
 
-  // Function to add an item back to the list
   void _addItem(int index, Map<String, dynamic> item) {
     setState(() {
       purchaseHistory.insert(index, item);
@@ -265,10 +253,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
     updatePurchaseHistory();
   }
 
-  // Function to update SharedPreferences with the modified purchaseHistory
   Future<void> updatePurchaseHistory() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    // Add the current date to each purchase item
     purchaseHistory.forEach((purchase) {
       purchase['date'] = DateTime.now().toString();
     });

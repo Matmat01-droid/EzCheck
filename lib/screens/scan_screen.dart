@@ -340,26 +340,21 @@ class _ScanScreenState extends State<ScanScreen> {
 
   void _startBarcodeScanning() {
     setState(() {
-      // Access barcode through the context parameter
       Provider.of<BarcodeProvider>(context, listen: false)
           .scanBarcodeNormal()
           .then((_) {
-        // Check if the scanned barcode is in the product list
         String scannedBarcode =
             Provider.of<BarcodeProvider>(context, listen: false).barcodeScanRes;
         Product? foundProduct = getProductByBarcode(scannedBarcode);
 
         if (foundProduct != null &&
             _areBarcodesEqual(foundProduct.barcode, scannedBarcode)) {
-          // Product found, navigate to details screen
           navigateToProductDetails(foundProduct);
         } else {
-          // Product not found or barcode does not match, show the "Product Not Available" dialog
           showProductNotAvailableDialog(context);
         }
       });
-
-      _barcodeController.text = ''; // Clear the previous barcode
+      _barcodeController.text = ''; 
     });
   }
 
@@ -413,10 +408,8 @@ class _ScanScreenState extends State<ScanScreen> {
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
                       if (snapshot.hasError) {
-                        // Handle error during scanning
                         return Text("Error: ${snapshot.error}");
                       }
-                      // Scanning is complete, update the controller with the barcode
                       _barcodeController.text = barcode.barcodeScanRes;
                       return TextField(
                         controller: _barcodeController,
@@ -428,10 +421,8 @@ class _ScanScreenState extends State<ScanScreen> {
                       );
                     } else if (snapshot.connectionState ==
                         ConnectionState.waiting) {
-                      // Scanning is in progress, show a loading indicator
                       return CircularProgressIndicator();
                     } else {
-                      // Handle other connection states if needed
                       return Text('Scan in progress...');
                     }
                   },
@@ -447,17 +438,14 @@ class _ScanScreenState extends State<ScanScreen> {
                     primary: Color(0xFF31434F),
                   ),
                   onPressed: () {
-                    // Check if the scanned or manually entered barcode is in the product list
                     String enteredBarcode = _barcodeController.text;
                     Product? foundProduct = getProductByBarcode(enteredBarcode);
 
                     if (foundProduct != null &&
                         _areBarcodesEqual(
                             foundProduct.barcode, enteredBarcode)) {
-                      // Product found, navigate to details screen
                       navigateToProductDetails(foundProduct);
                     } else {
-                      // Product not found or barcode does not match, show the "Product Not Available" dialog
                       showProductNotAvailableDialog(context);
                     }
                   },
@@ -494,7 +482,6 @@ class _ScanScreenState extends State<ScanScreen> {
       print('Found Product: ${foundProduct.name}');
       return foundProduct;
     } catch (e) {
-      // Handle the case where the product is not found
       return null;
     }
   }
