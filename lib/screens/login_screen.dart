@@ -12,6 +12,11 @@ class LoginPage extends StatelessWidget {
     TextEditingController passwordController = TextEditingController();
     DatabaseHelper dbHelper = DatabaseHelper();
 
+    // Focus nodes
+    final FocusNode emailFocus = FocusNode();
+    final FocusNode passwordFocus = FocusNode();
+
+    // Login function
     void login() async {
       String email = emailController.text;
       String password = passwordController.text;
@@ -88,6 +93,12 @@ class LoginPage extends StatelessWidget {
                 ),
                 TextField(
                   controller: emailController,
+                  focusNode: emailFocus,
+                  textInputAction: TextInputAction.next,
+                  onSubmitted: (term) {
+                    emailFocus.unfocus();
+                    FocusScope.of(context).requestFocus(passwordFocus);
+                  },
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white.withOpacity(1.0),
@@ -100,6 +111,12 @@ class LoginPage extends StatelessWidget {
                 const SizedBox(height: 10),
                 TextField(
                   controller: passwordController,
+                  focusNode: passwordFocus,
+                  textInputAction: TextInputAction.done,
+                  onSubmitted: (term) {
+                    passwordFocus.unfocus();
+                    login();
+                  },
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white.withOpacity(0.8),
